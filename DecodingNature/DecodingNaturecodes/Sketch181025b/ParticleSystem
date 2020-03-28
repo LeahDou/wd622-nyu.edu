@@ -1,0 +1,57 @@
+
+class ParticleSystem {
+
+  ArrayList<Particle> particles;// An arraylist for all the particles
+  PVector loc, vel, acc;        // An origin point for where particles are birthed
+
+  ParticleSystem(int num, PVector v) {
+    particles = new ArrayList<Particle>();
+    acc = new PVector(0.05, 0);
+    vel = new PVector(-.1, 0);// Initialize the arraylist
+    loc = v.get();                        // Store the origin point
+    for (int i = 0; i < num; i++) {
+      particles.add(new Particle(loc));    // Add "num" amount of particles to the arraylist
+    }
+   
+  }
+
+  // A function to apply a force to all Particles
+  void applyForce(PVector f) {
+    for (Particle p : particles) {
+      p.applyForce(f);
+    }
+  }
+
+  void applyAttractor(Attractor a) {
+    for (Particle p : particles) { 
+      PVector force = a.attractionForce(p);        
+      p.applyForce(force);
+    }
+  }
+
+
+
+
+  void run() {
+    for (int i = particles.size()-1; i >= 0; i--) {
+      Particle p = particles.get(i);
+      p.run();
+      if (p.isDead()) {
+        particles.remove(i);
+      }
+    }
+  }
+
+  void addParticle() {
+    particles.add(new Particle(loc));
+  }
+
+  // A method to test if the particle system still has particles
+  boolean dead() {
+    if (particles.isEmpty()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
