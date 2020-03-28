@@ -1,0 +1,77 @@
+// The Nature of Code
+// Daniel Shiffman
+// http://natureofcode.com
+
+class Particle {
+  PVector position;
+  PVector velocity;
+  PVector acceleration;
+  float lifespan;
+  float r, g, b;
+  float mass = 1; // Let's do something better here!
+
+  Particle(PVector l) {
+    acceleration = new PVector(0, 0);
+    velocity = new PVector(random(-1, 1), random(-1, 1));
+    position = l.get();
+    lifespan = 255.0;
+    r = 0;
+    g = 92;
+    b = 175;
+  }
+
+  void run() {
+    update();
+    display();
+  }
+
+  void applyForce(PVector force) {
+    PVector f = force.get();
+    f.div(mass);   
+    acceleration.add(f);
+  }
+
+  // Method to update position
+  void update() {
+    velocity.add(acceleration);
+    position.add(velocity);
+    acceleration.mult(0);
+    lifespan -= 2.0;
+  }
+
+  void display() {
+    if (lifespan > 1500) {
+      r++;
+      g++;
+      b--;
+    }
+    else if (lifespan<1500 && lifespan>1000){
+     r--;
+      g--;
+      b++;
+    }
+    else if (lifespan <1000 ){
+    r++;
+    g--;
+    b--;
+    }
+    if (position.x<width/2){
+    fill(255,10);}
+    else {
+    fill(100,10);
+    }
+    noStroke();
+    ellipse(position.x, position.y, 1, 1);
+    //line(position.x, position.y, width/2, height/2);
+    //line(0, 0, width, height);
+    stroke(255, 1);
+  }
+
+  boolean isDead() {
+    if (lifespan < 0.0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
