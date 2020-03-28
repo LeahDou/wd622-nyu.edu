@@ -1,0 +1,44 @@
+class Attractor {
+  float mass;
+  PVector loc, vel, acc;
+  Attractor (float x, float y, float _mass) {
+    loc = new PVector(x, y);
+    mass = _mass;
+    vel = new PVector(0, 0);
+    acc = new PVector(random(-.1, .1), random(-.1, .1));
+  }
+
+  PVector attractionForce(Particle p) {
+    PVector force = PVector.sub(loc, p.position); 
+    float distance = force.mag();
+    force.normalize();
+    float g = .01;
+    distance*=distance;
+    distance = constrain(distance, 5, 20);
+    float forceMag = (g* mass *p.mass)/(distance);
+    force.mult(forceMag);
+    return force;
+  }
+
+  void update() {
+    //vel .add(acc);
+    //loc.add(vel);
+    //acc.mult(0);
+    if (loc.x<0 ||  loc.x >width) {
+      vel.x *= -1;
+    } else if (loc.y <0 ||loc.y >height) {
+      vel.y *= -1;
+    }
+  }
+
+  void display() {
+    noStroke();
+    noFill();
+    pushMatrix();
+    translate(width/2,height/2);
+    rotate(frameCount/10);
+    //fill(255);
+    ellipse(loc.x,loc.y, mass, mass);
+    popMatrix();
+  }
+}
